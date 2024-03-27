@@ -30,7 +30,7 @@ const AgeDisplay = ({ dob }) => {
 	);
 
 	return (
-		<div className={`flex items-center justify-center w-full space-x-1 `}>
+		<div className={`flex items-center justify-center w-full space-x-1 place-items-center align-middle `}>
 			{renderTimeUnit(age.years, 'YEARS')}
 			<span className='lg:text-8xl text-xl font-bold align-middle px-1 relative top-[-1.2rem]'> :: </span>
 			{renderTimeUnit(age.months, 'MONTHS')}

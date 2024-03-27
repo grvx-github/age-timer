@@ -40,7 +40,7 @@ const Home = ({ theme }) => {
 	};
 
 	return (
-		<div className=' h-screen items-center justify-center align-middle text-center bg-white dark:bg-[#040D12] dark:text-[#93B1A6] absolute w-full top-0'>
+		<div className='flex h-screen align-middle text-center bg-white dark:bg-[#040D12] dark:text-[#93B1A6] w-full'>
 			{showDateOfBirthInput && <DateOfBirthInput dob={dob} setDob={setDob} onNext={handleDateOfBirthNext} />}
 			{showTimeOfBirthInput && <TimeOfBirthInput timeOfBirth={timeOfBirth} setTimeOfBirth={setTimeOfBirth} onNext={handleTimeOfBirthNext} />}
 			{theme === 'flip' ? (

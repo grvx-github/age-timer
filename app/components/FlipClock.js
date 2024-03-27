@@ -10,40 +10,50 @@ const FlipClock = ({ dob }) => {
 		minutes: [],
 		seconds: []
 	});
-	const [prevSeconds, setPrevSeconds] = useState(age.seconds); // Initialize with initial seconds
-	const [currentSeconds, setCurrentSeconds] = useState(age.seconds); // Initialize with initial seconds
 
-	// In the useEffect hook where you update the time state
 	useEffect(() => {
-		const timerID = setInterval(() => {
-			const currentTime = new Date();
-			const dateOfBirth = new Date(dob);
-			const difference = currentTime.getTime() - dateOfBirth.getTime();
-
-			// Update the age state
-			setAge({
-				years: Math.floor(difference / (1000 * 60 * 60 * 24 * 365)),
-				months: Math.floor((difference % (1000 * 60 * 60 * 24 * 365)) / (1000 * 60 * 60 * 24 * 30)),
-				days: Math.floor((difference % (1000 * 60 * 60 * 24 * 30)) / (1000 * 60 * 60 * 24)),
-				hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-				minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
-				seconds: Math.floor((difference % (1000 * 60)) / 1000)
-			});
-
-			// Update prevSeconds to the current value of currentSeconds
-			setPrevSeconds(currentSeconds);
-
-			// Update currentSeconds to the new value
-			setCurrentSeconds(Math.floor((difference % (1000 * 60)) / 1000));
-		}, 1000);
+		const timerID = setInterval(() => tick(), 1000);
 
 		return () => {
 			clearInterval(timerID);
 		};
 	}, []);
 
-	// Compare prevSeconds and currentSeconds to determine which elements have changed
-	const changedIndexes = prevSeconds.map((value, index) => (value !== currentSeconds[index] ? index : -1)).filter(index => index !== -1);
+	const tick = () => {
+		setTime(new Date());
+		updateAge();
+	};
+
+	const calculateDifference = () => {
+		const currentTime = new Date();
+		const dateOfBirth = new Date(dob);
+		const difference = currentTime.getTime() - dateOfBirth.getTime();
+		return difference;
+	};
+
+	const updateAge = () => {
+		const difference = calculateDifference();
+		const years = Math.floor(difference / (1000 * 60 * 60 * 24 * 365));
+		const months = Math.floor((difference % (1000 * 60 * 60 * 24 * 365)) / (1000 * 60 * 60 * 24 * 30));
+		const days = Math.floor((difference % (1000 * 60 * 60 * 24 * 30)) / (1000 * 60 * 60 * 24));
+		const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+		const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+		const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+		setAge({
+			years: splitter(years),
+			months: splitter(months),
+			days: splitter(days),
+			hours: splitter(hours),
+			minutes: splitter(minutes),
+			seconds: splitter(seconds)
+		});
+	};
+
+	const splitter = (num) => {
+		const numString = num.toString().padStart(2, '0');
+		return numString.split('').map(Number);
+	};
 
 	useEffect(() => {
 		// Check if seconds digit has changed
@@ -53,9 +63,8 @@ const FlipClock = ({ dob }) => {
 			if (secondsElement) {
 				const currentSeconds = age.seconds;
 				const changedIndex = prevSeconds.findIndex((value, index) => value !== currentSeconds[index]);
-				console.log(changedIndex)
 				if (changedIndex !== -1) {
-					const segment = secondsElement.querySelector(`.secondsTimeSegment_${changedIndex}`);
+					const segment = secondsElement.querySelector(`.segmentDisplay_${changedIndex}`);
 					if (segment) {
 						segment.classList.add('flip');
 						setTimeout(() => {
@@ -67,40 +76,9 @@ const FlipClock = ({ dob }) => {
 		}, 0);
 	}, [age.seconds]);
 
-	// useEffect(() => {
-	// 	// Check if minutes digit has changed
-	// 	if (prevMinutes !== minutes) {
-	// 		// Trigger animation for minutes flip
-	// 		const minutesElement = document.getElementById('minutes');
-	// 		if (minutesElement) {
-	// 			minutesElement.classList.add('flip');
-	// 			setTimeout(() => {
-	// 				minutesElement.classList.remove('flip');
-	// 			}, 900);
-	// 		}
-
-	// 		setPrevMinutes(minutes);
-	// 	}
-	// }, [prevMinutes, minutes]);
-
-	// useEffect(() => {
-	// 	// Check if hours digit has changed
-	// 	if (prevHours !== hours) {
-	// 		// Trigger animation for hours flip
-	// 		const hoursElement = document.getElementById('hours');
-	// 		if (hoursElement) {
-	// 			hoursElement.classList.add('flip');
-	// 			setTimeout(() => {
-	// 				hoursElement.classList.remove('flip');
-	// 			}, 900);
-	// 		}
-
-	// 		setPrevHours(hours);
-	// 	}
-	// }, [prevHours, hours]);
 
 	return (
-		<div className='clockWrapper h-full grid grid-cols-3 gap-y-12 place-items-center'>
+		<div className='clockWrapper h-3/4 m-auto w-3/4 grid grid-cols-3 gap-y-12 place-items-center'>
 			<div className='timeSection' id='years'>
 				<div className="timeGroup flex gap-4 text-center">
 					<div className="timeSegment text-8xl font-black w-24">
