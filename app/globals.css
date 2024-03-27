@@ -10,24 +10,71 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --foreground-rgb: (246, 245, 245);
+    --background-start-rgb: (53, 55, 75);
+    --background-end-rgb: (53, 55, 75);
   }
 }
 
+/* Default light mode styles */
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
 }
+
+/* Dark mode styles */
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+}
+
+.perspective-400 {
+  perspective: 400px;
+}
+
+.flip .segmentOverlay_top, .flip .segmentDisplay_top {
+  transform-origin: bottom;
+  animation: flipTop 0.8s cubic-bezier(.37, .01, .94, .35) ;
+}
+
+.flip .segmentOverlay_bottom {
+  transform-origin: top;
+  animation: flipBottom 0.8s linear;
+}
+
+@keyframes flipTop {
+  0% {
+    transform: rotateX(0deg);
+  }
+
+  0%,
+  99% {
+    opacity: 0.99;
+    z-index: 2;
+  }
+
+  100% {
+    transform: rotateX(-90deg);
+    opacity: 0;
+  }
+}
+
+@keyframes flipBottom {
+  0%, 50%{
+    z-index: -1;
+    transform: rotateX(90deg);
+    opacity: 0;
+  }
+
+  51%{
+    opacity: 0.99;
+  }
+
+  100% {
+    opacity: 0.99;
+    transform: rotateX(0deg);
+    z-index: 5;
   }
 }
