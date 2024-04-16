@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 const FlipClock = ({ dob }) => {
 	const [time, setTime] = useState(new Date());
+	const [prevTime, setPrevTime] = useState(null)
 	const [age, setAge] = useState({
 		years: [],
 		months: [],
@@ -26,7 +27,7 @@ const FlipClock = ({ dob }) => {
 
 	const calculateDifference = () => {
 		const currentTime = new Date();
-		const dateOfBirth = new Date(dob);
+		const dateOfBirth = dob
 		const difference = currentTime.getTime() - dateOfBirth.getTime();
 		return difference;
 	};

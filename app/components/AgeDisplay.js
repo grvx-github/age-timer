@@ -5,7 +5,7 @@ const AgeDisplay = ({ dob }) => {
 
 	const calculateAge = () => {
 		const now = new Date();
-		const birthDate = new Date(dob);
+		const birthDate = dob
 		const diff = Math.ceil(now - birthDate) / 1000;
 		const years = Math.floor(diff / (60 * 60 * 24 * 365));
 		const months = Math.floor((diff % (60 * 60 * 24 * 365)) / (60 * 60 * 24 * 30));
